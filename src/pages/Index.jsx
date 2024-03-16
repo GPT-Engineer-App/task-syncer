@@ -14,6 +14,7 @@ const Index = () => {
   const [timeLimit, setTimeLimit] = useState("");
   const [timeOfDay, setTimeOfDay] = useState("");
   const [folders, setFolders] = useState([]);
+  const [collaboratorEmails, setCollaboratorEmails] = useState("");
   const toast = useToast();
 
   const handleAddTask = () => {
@@ -27,6 +28,7 @@ const Index = () => {
         timeLimit: timeLimit,
         timeOfDay: timeOfDay,
         completed: false,
+        collaboratorEmails: collaboratorEmails.split(",").map((email) => email.trim()),
       };
       setTasks([...tasks, task]);
       setNewTask("");
@@ -99,6 +101,7 @@ const Index = () => {
             </Select>
             <Input type="number" placeholder="Time limit (minutes)" value={timeLimit} onChange={(e) => setTimeLimit(e.target.value)} mr={2} mb={2} />
             <Input type="time" value={timeOfDay} onChange={(e) => setTimeOfDay(e.target.value)} mr={2} mb={2} />
+            <Input placeholder="Enter collaborator emails (comma-separated)" value={collaboratorEmails} onChange={(e) => setCollaboratorEmails(e.target.value)} mr={2} mb={2} />
             <Button leftIcon={<FaPlus />} onClick={handleAddTask}>
               Add Task
             </Button>
