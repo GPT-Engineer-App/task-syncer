@@ -87,7 +87,21 @@ const Index = () => {
       {view === "folder" ? (
         <FolderList folders={folders} tasks={tasks} setSelectedFolder={setSelectedFolder} handleDeleteTask={handleDeleteTask} handleTaskCompletion={handleTaskCompletion} />
       ) : view === "today" ? (
-        <TaskList tasks={tasks.filter((task) => task.dueDate === new Date().toISOString().slice(0, 10))} handleDeleteTask={handleDeleteTask} handleTaskCompletion={handleTaskCompletion} />
+        <VStack align="stretch" spacing={4}>
+          {tasks
+            .filter((task) => task.dueDate === new Date().toISOString().slice(0, 10))
+            .sort((a, b) => a.timeOfDay.localeCompare(b.timeOfDay))
+            .map((task, index) => (
+              <React.Fragment key={task.id}>
+                <TaskList tasks={[task]} handleDeleteTask={handleDeleteTask} handleTaskCompletion={handleTaskCompletion} />
+                {index < tasks.length - 1 && (
+                  <Button colorScheme="gray" size="sm" mt={2}>
+                    Break
+                  </Button>
+                )}
+              </React.Fragment>
+            ))}
+        </VStack>
       ) : (
         <>
           <Flex mb={4}>
