@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Button, Flex, Heading, Input, Select, Text, VStack, IconButton, useToast } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import { Box, Button, Flex, Heading, Input, Select, Text, VStack, IconButton, useToast, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, FormControl, FormLabel, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper } from "@chakra-ui/react";
 import { FaPlus, FaTrash, FaFolder, FaTasks, FaCalendarDay } from "react-icons/fa";
 import FolderList from "../components/FolderList";
 import TaskList from "../components/TaskList";
@@ -15,7 +15,22 @@ const Index = () => {
   const [timeOfDay, setTimeOfDay] = useState("");
   const [folders, setFolders] = useState([]);
   const [collaboratorEmails, setCollaboratorEmails] = useState("");
+  const [breakDuration, setBreakDuration] = useState(0);
+  const [remainingBreakTime, setRemainingBreakTime] = useState(0);
+  const [isBreakModalOpen, setIsBreakModalOpen] = useState(false);
   const toast = useToast();
+
+  useEffect(() => {
+    let timer;
+    if (remainingBreakTime > 0) {
+      timer = setInterval(() => {
+        setRemainingBreakTime((prevTime) => prevTime - 1);
+      }, 1000);
+    } else {
+      setIsBreakModalOpen(false);
+    }
+    return () => clearInterval(timer);
+  }, [remainingBreakTime]);
 
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
@@ -95,7 +110,7 @@ const Index = () => {
               <React.Fragment key={task.id}>
                 <TaskList tasks={[task]} handleDeleteTask={handleDeleteTask} handleTaskCompletion={handleTaskCompletion} />
                 {index < tasks.length - 1 && (
-                  <Button colorScheme="gray" size="sm" mt={2}>
+                  <Button colorScheme="gray" size="sm" mt={2} onClick={() => setIsBreakModalOpen(true)}>
                     Break
                   </Button>
                 )}
@@ -123,6 +138,34 @@ const Index = () => {
           <TaskList tasks={tasks} handleDeleteTask={handleDeleteTask} handleTaskCompletion={handleTaskCompletion} />
         </>
       )}
+      <Modal isOpen={isBreakModalOpen} onClose={() => setIsBreakModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Set Break Duration</ModalHeader>
+          <ModalBody>
+            <FormControl>
+              <FormLabel>Break Duration (minutes)</FormLabel>
+              <NumberInput value={breakDuration} onChange={(value) => setBreakDuration(parseInt(value))}>
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </FormControl>
+            {remainingBreakTime > 0 && (
+              <Text mt={4}>
+                Remaining Break Time: {Math.floor(remainingBreakTime / 60)}:{(remainingBreakTime % 60).toString().padStart(2, "0")}
+              </Text>
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={() => setRemainingBreakTime(breakDuration * 60)}>
+              Start Break
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
