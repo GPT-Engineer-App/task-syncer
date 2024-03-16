@@ -95,7 +95,16 @@ const Index = () => {
   const handleUpdateTask = () => {
     const updatedTasks = tasks.map((task) => {
       if (task.id === editTask.id) {
-        return editTask;
+        return {
+          ...task,
+          title: editTask.title,
+          folder: editTask.folder,
+          dueDate: editTask.dueDate,
+          priority: editTask.priority,
+          timeLimit: editTask.timeLimit,
+          timeOfDay: editTask.timeOfDay,
+          notes: editTask.notes,
+        };
       }
       return task;
     });
