@@ -13,6 +13,9 @@ const TaskList = ({ tasks, handleDeleteTask, handleTaskCompletion }) => {
             </Text>
             <Text>Folder: {task.folder}</Text>
             <Text>Due Date: {task.dueDate}</Text>
+            <Text>Priority: {task.priority}</Text>
+            <Text>Time Limit: {task.timeLimit} minutes</Text>
+            <Text>Time of Day: {task.timeOfDay}</Text>
           </Box>
           <Flex>
             <IconButton icon={<FaTrash />} onClick={() => handleDeleteTask(task.id)} mr={2} />
