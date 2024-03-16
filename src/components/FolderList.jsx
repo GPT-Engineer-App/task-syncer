@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Text, VStack } from "@chakra-ui/react";
 import TaskList from "./TaskList";
 
-const FolderList = ({ folders, tasks, handleDeleteTask, handleTaskCompletion }) => {
+const FolderList = ({ folders, tasks, setSelectedFolder, handleDeleteTask, handleTaskCompletion }) => {
   return (
     <VStack align="stretch" spacing={4}>
       {folders.map((folder) => (
