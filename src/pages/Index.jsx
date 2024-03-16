@@ -18,6 +18,8 @@ const Index = () => {
   const [breakDuration, setBreakDuration] = useState(0);
   const [remainingBreakTime, setRemainingBreakTime] = useState(0);
   const [isBreakModalOpen, setIsBreakModalOpen] = useState(false);
+  const [editTask, setEditTask] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
@@ -79,6 +81,29 @@ const Index = () => {
     setTasks(updatedTasks);
     toast({
       title: "Task completed",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
+
+  const handleEditTask = (task) => {
+    setEditTask(task);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateTask = () => {
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === editTask.id) {
+        return editTask;
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+    setIsEditModalOpen(false);
+    setEditTask(null);
+    toast({
+      title: "Task updated",
       status: "success",
       duration: 2000,
       isClosable: true,
@@ -162,6 +187,51 @@ const Index = () => {
           <ModalFooter>
             <Button colorScheme="blue" onClick={() => setRemainingBreakTime(breakDuration * 60)}>
               Start Break
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Task</ModalHeader>
+          <ModalBody>
+            <FormControl mb={4}>
+              <FormLabel>Task Title</FormLabel>
+              <Input value={editTask?.title || ""} onChange={(e) => setEditTask({ ...editTask, title: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Folder</FormLabel>
+              <Input value={editTask?.folder || ""} onChange={(e) => setEditTask({ ...editTask, folder: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Due Date</FormLabel>
+              <Input type="date" value={editTask?.dueDate || ""} onChange={(e) => setEditTask({ ...editTask, dueDate: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Priority</FormLabel>
+              <Select value={editTask?.priority || "low"} onChange={(e) => setEditTask({ ...editTask, priority: e.target.value })}>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </Select>
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Time Limit (minutes)</FormLabel>
+              <Input type="number" value={editTask?.timeLimit || ""} onChange={(e) => setEditTask({ ...editTask, timeLimit: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Time of Day</FormLabel>
+              <Input type="time" value={editTask?.timeOfDay || ""} onChange={(e) => setEditTask({ ...editTask, timeOfDay: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Notes</FormLabel>
+              <Input value={editTask?.notes || ""} onChange={(e) => setEditTask({ ...editTask, notes: e.target.value })} />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={handleUpdateTask}>
+              Update Task
             </Button>
           </ModalFooter>
         </ModalContent>

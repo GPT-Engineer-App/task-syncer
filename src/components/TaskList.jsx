@@ -15,7 +15,7 @@ const getTaskBackgroundColor = (priority) => {
   }
 };
 
-const TaskList = ({ tasks, handleDeleteTask, handleTaskCompletion, handleCollaborate }) => {
+const TaskList = ({ tasks, handleDeleteTask, handleTaskCompletion, handleCollaborate, handleEditTask }) => {
   return (
     <VStack align="stretch" spacing={4}>
       {tasks.map((task) => (
@@ -35,8 +35,11 @@ const TaskList = ({ tasks, handleDeleteTask, handleTaskCompletion, handleCollabo
             <Button colorScheme="green" onClick={() => handleTaskCompletion(task.id)} disabled={task.completed} mr={2}>
               {task.completed ? "Completed" : "Complete"}
             </Button>
-            <Button colorScheme="blue" onClick={() => handleCollaborate(task.id)}>
+            <Button colorScheme="blue" onClick={() => handleCollaborate(task.id)} mr={2}>
               Collaborate
+            </Button>
+            <Button colorScheme="orange" onClick={() => handleEditTask(task)}>
+              Edit
             </Button>
           </Flex>
         </Flex>
