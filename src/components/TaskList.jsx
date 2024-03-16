@@ -2,11 +2,24 @@ import React from "react";
 import { Box, Button, Flex, IconButton, Text, VStack } from "@chakra-ui/react";
 import { FaTrash } from "react-icons/fa";
 
+const getTaskBackgroundColor = (priority) => {
+  switch (priority) {
+    case "high":
+      return "red.100";
+    case "medium":
+      return "yellow.100";
+    case "low":
+      return "green.100";
+    default:
+      return "gray.100";
+  }
+};
+
 const TaskList = ({ tasks, handleDeleteTask, handleTaskCompletion }) => {
   return (
     <VStack align="stretch" spacing={4}>
       {tasks.map((task) => (
-        <Flex key={task.id} p={4} bg="gray.100" borderRadius="md" justify="space-between" align="center">
+        <Flex key={task.id} p={4} bg={getTaskBackgroundColor(task.priority)} borderRadius="md" justify="space-between" align="center">
           <Box>
             <Text fontSize="lg" fontWeight="bold" textDecoration={task.completed ? "line-through" : "none"}>
               {task.title}
