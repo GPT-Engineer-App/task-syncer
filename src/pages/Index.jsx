@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { Box, Button, Flex, Heading, Input, Text, VStack, IconButton, useToast } from "@chakra-ui/react";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash, FaFolder, FaTasks } from "react-icons/fa";
+import FolderList from "../components/FolderList";
+import TaskList from "../components/TaskList";
 
 const Index = () => {
+  const [view, setView] = useState("all");
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [selectedFolder, setSelectedFolder] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [folders, setFolders] = useState([]);
   const toast = useToast();
 
   const handleAddTask = () => {
@@ -61,33 +65,29 @@ const Index = () => {
   return (
     <Box p={4}>
       <Heading mb={4}>Task Automation</Heading>
-      <Flex mb={4}>
-        <Input placeholder="Enter task" value={newTask} onChange={(e) => setNewTask(e.target.value)} mr={2} />
-        <Input placeholder="Select folder" value={selectedFolder} onChange={(e) => setSelectedFolder(e.target.value)} mr={2} />
-        <Input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} mr={2} />
-        <Button leftIcon={<FaPlus />} onClick={handleAddTask}>
-          Add Task
+      <Flex mb={4} align="center">
+        <Button leftIcon={<FaFolder />} onClick={() => setView("folder")} mr={2}>
+          Folder View
+        </Button>
+        <Button leftIcon={<FaTasks />} onClick={() => setView("all")}>
+          All Tasks View
         </Button>
       </Flex>
-      <VStack align="stretch" spacing={4}>
-        {tasks.map((task) => (
-          <Flex key={task.id} p={4} bg="gray.100" borderRadius="md" justify="space-between" align="center">
-            <Box>
-              <Text fontSize="lg" fontWeight="bold" textDecoration={task.completed ? "line-through" : "none"}>
-                {task.title}
-              </Text>
-              <Text>Folder: {task.folder}</Text>
-              <Text>Due Date: {task.dueDate}</Text>
-            </Box>
-            <Flex>
-              <IconButton icon={<FaTrash />} onClick={() => handleDeleteTask(task.id)} mr={2} />
-              <Button colorScheme="green" onClick={() => handleTaskCompletion(task.id)} disabled={task.completed}>
-                {task.completed ? "Completed" : "Complete"}
-              </Button>
-            </Flex>
+      {view === "folder" ? (
+        <FolderList folders={folders} setSelectedFolder={setSelectedFolder} />
+      ) : (
+        <>
+          <Flex mb={4}>
+            <Input placeholder="Enter task" value={newTask} onChange={(e) => setNewTask(e.target.value)} mr={2} />
+            <Input placeholder="Select folder" value={selectedFolder} onChange={(e) => setSelectedFolder(e.target.value)} mr={2} />
+            <Input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} mr={2} />
+            <Button leftIcon={<FaPlus />} onClick={handleAddTask}>
+              Add Task
+            </Button>
           </Flex>
-        ))}
-      </VStack>
+          <TaskList tasks={tasks} handleDeleteTask={handleDeleteTask} handleTaskCompletion={handleTaskCompletion} />
+        </>
+      )}
     </Box>
   );
 };
