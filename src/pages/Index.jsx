@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Flex, Heading, Input, Select, Text, VStack, IconButton, useToast, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, FormControl, FormLabel, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Input, Select, Text, VStack, IconButton, useToast, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, FormControl, FormLabel, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Container, useBreakpointValue } from "@chakra-ui/react";
 import { FaPlus, FaTrash, FaFolder, FaTasks, FaCalendarDay } from "react-icons/fa";
 import FolderList from "../components/FolderList";
 import TaskList from "../components/TaskList";
@@ -120,7 +120,7 @@ const Index = () => {
   };
 
   return (
-    <Box p={4}>
+    <Container maxWidth="container.lg" p={4}>
       <Heading mb={4}>Task Automation</Heading>
       <Flex mb={4} align="center" wrap="wrap">
         <Button leftIcon={<FaFolder />} onClick={() => setView("folder")} mr={2} mb={2}>
@@ -153,7 +153,7 @@ const Index = () => {
         </VStack>
       ) : (
         <>
-          <Flex mb={4}>
+          <Flex mb={4} direction={{ base: "column", md: "row" }} align={{ base: "stretch", md: "center" }}>
             <Input placeholder="Enter task" value={newTask} onChange={(e) => setNewTask(e.target.value)} mr={2} mb={2} />
             <Input placeholder="Select folder" value={selectedFolder} onChange={(e) => setSelectedFolder(e.target.value)} mr={2} mb={2} />
             <Input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} mr={2} mb={2} />
@@ -245,7 +245,7 @@ const Index = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Box>
+    </Container>
   );
 };
 
