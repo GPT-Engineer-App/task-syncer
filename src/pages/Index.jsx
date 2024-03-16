@@ -74,7 +74,13 @@ const Index = () => {
         </Button>
       </Flex>
       {view === "folder" ? (
-        <FolderList folders={folders} setSelectedFolder={setSelectedFolder} />
+        <FolderList
+          folders={folders}
+          tasks={tasks}
+          setSelectedFolder={setSelectedFolder}
+          handleDeleteTask={handleDeleteTask}
+          handleTaskCompletion={handleTaskCompletion}
+        />
       ) : (
         <>
           <Flex mb={4}>
