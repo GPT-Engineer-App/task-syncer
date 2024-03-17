@@ -121,7 +121,7 @@ const Index = () => {
 
   return (
     <Container maxWidth="container.lg" p={4}>
-      <Heading mb={4}>Task Automation</Heading>
+      <Heading mb={4}>This Is How My Brain Works</Heading>
       <Flex mb={4} align="center" wrap="wrap">
         <Button leftIcon={<FaFolder />} onClick={() => setView("folder")} mr={2} mb={2}>
           Folder View
