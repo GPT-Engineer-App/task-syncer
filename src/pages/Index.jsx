@@ -142,7 +142,7 @@ const Index = () => {
             .sort((a, b) => a.timeOfDay.localeCompare(b.timeOfDay))
             .map((task, index) => (
               <React.Fragment key={task.id}>
-                <TaskList tasks={[task]} handleDeleteTask={handleDeleteTask} handleTaskCompletion={handleTaskCompletion} />
+                <TaskList tasks={[task]} handleDeleteTask={handleDeleteTask} handleTaskCompletion={handleTaskCompletion} handleCollaborate={() => {}} handleEditTask={handleEditTask} />
                 {index < tasks.length - 1 && (
                   <Button colorScheme="gray" size="sm" mt={2} onClick={() => setIsBreakModalOpen(true)}>
                     Break
@@ -173,29 +173,94 @@ const Index = () => {
         </>
       )}
       <Modal isOpen={isBreakModalOpen} onClose={() => setIsBreakModalOpen(false)}>
+        {}
+      </Modal>
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Set Break Duration</ModalHeader>
+          <ModalHeader>Edit Task</ModalHeader>
           <ModalBody>
-            <FormControl>
-              <FormLabel>Break Duration (minutes)</FormLabel>
-              <NumberInput value={breakDuration} onChange={(value) => setBreakDuration(parseInt(value))}>
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
+            <FormControl mb={4}>
+              <FormLabel>Task Title</FormLabel>
+              <Input value={editTask?.title || ""} onChange={(e) => setEditTask({ ...editTask, title: e.target.value })} />
             </FormControl>
-            {remainingBreakTime > 0 && (
-              <Text mt={4}>
-                Remaining Break Time: {Math.floor(remainingBreakTime / 60)}:{(remainingBreakTime % 60).toString().padStart(2, "0")}
-              </Text>
-            )}
+            <FormControl mb={4}>
+              <FormLabel>Folder</FormLabel>
+              <Input value={editTask?.folder || ""} onChange={(e) => setEditTask({ ...editTask, folder: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Due Date</FormLabel>
+              <Input type="date" value={editTask?.dueDate || ""} onChange={(e) => setEditTask({ ...editTask, dueDate: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Priority</FormLabel>
+              <Select value={editTask?.priority || "low"} onChange={(e) => setEditTask({ ...editTask, priority: e.target.value })}>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </Select>
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Time Limit (minutes)</FormLabel>
+              <Input type="number" value={editTask?.timeLimit || ""} onChange={(e) => setEditTask({ ...editTask, timeLimit: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Time of Day</FormLabel>
+              <Input type="time" value={editTask?.timeOfDay || ""} onChange={(e) => setEditTask({ ...editTask, timeOfDay: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Notes</FormLabel>
+              <Input value={editTask?.notes || ""} onChange={(e) => setEditTask({ ...editTask, notes: e.target.value })} />
+            </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" onClick={() => setRemainingBreakTime(breakDuration * 60)}>
-              Start Break
+            <Button colorScheme="blue" onClick={handleUpdateTask}>
+              Update Task
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Task</ModalHeader>
+          <ModalBody>
+            <FormControl mb={4}>
+              <FormLabel>Task Title</FormLabel>
+              <Input value={editTask?.title || ""} onChange={(e) => setEditTask({ ...editTask, title: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Folder</FormLabel>
+              <Input value={editTask?.folder || ""} onChange={(e) => setEditTask({ ...editTask, folder: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Due Date</FormLabel>
+              <Input type="date" value={editTask?.dueDate || ""} onChange={(e) => setEditTask({ ...editTask, dueDate: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Priority</FormLabel>
+              <Select value={editTask?.priority || "low"} onChange={(e) => setEditTask({ ...editTask, priority: e.target.value })}>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </Select>
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Time Limit (minutes)</FormLabel>
+              <Input type="number" value={editTask?.timeLimit || ""} onChange={(e) => setEditTask({ ...editTask, timeLimit: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Time of Day</FormLabel>
+              <Input type="time" value={editTask?.timeOfDay || ""} onChange={(e) => setEditTask({ ...editTask, timeOfDay: e.target.value })} />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Notes</FormLabel>
+              <Input value={editTask?.notes || ""} onChange={(e) => setEditTask({ ...editTask, notes: e.target.value })} />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={handleUpdateTask}>
+              Update Task
             </Button>
           </ModalFooter>
         </ModalContent>
