@@ -34,6 +34,17 @@ const Index = () => {
     return () => clearInterval(timer);
   }, [remainingBreakTime]);
 
+  useEffect(() => {
+    const savedTasks = JSON.parse(localStorage.getItem("tasks"));
+    if (savedTasks) {
+      setTasks(savedTasks);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
       const task = {
